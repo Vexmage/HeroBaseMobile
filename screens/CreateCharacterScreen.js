@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal, ScrollView } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import CustomPicker from '../components/CustomPicker';
+import StatRollModal from '../components/StatRollModal';
+import dwarf from '../data/ancestries/dwarf.json';
+import elf from '../data/ancestries/elf.json';
+import halfling from '../data/ancestries/halfling.json';
+import human from '../data/ancestries/human.json';
 
+const ancestries = { dwarf, elf, halfling, human };
 const statsOrder = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-const ancestries = ["Elf", "Dwarf", "Human", "Halfling"];
 const backgrounds = ["Soldier", "Scholar", "Farmer", "Merchant"];
 const classes = ["Warrior", "Mage", "Rogue", "Priest"];
 
 const CreateCharacterScreen = ({ navigation }) => {
   const [character, setCharacter] = useState({
     name: '',
-    ancestry: ancestries[0],
+    ancestry: Object.keys(ancestries)[0],
     background: backgrounds[0],
     characterClass: classes[0],
     stats: {
@@ -33,6 +38,10 @@ const CreateCharacterScreen = ({ navigation }) => {
   });
   const [currentStatIndex, setCurrentStatIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const handleChange = (value, field) => {
+    setCharacter({ ...character, [field]: value });
+  };
 
   const rollStat = () => {
     let rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
@@ -62,10 +71,6 @@ const CreateCharacterScreen = ({ navigation }) => {
     }
   };
 
-  const handleChange = (value, field) => {
-    setCharacter({ ...character, [field]: value });
-  };
-
   const saveCharacter = async (characterData) => {
     try {
       const existingCharacters = await SecureStore.getItemAsync('characters');
@@ -79,7 +84,6 @@ const CreateCharacterScreen = ({ navigation }) => {
       console.error(e);
     }
   };
-  
 
   return (
     <ScrollView style={styles.container}>
@@ -89,48 +93,37 @@ const CreateCharacterScreen = ({ navigation }) => {
         value={character.name}
         onChangeText={text => handleChange(text, 'name')}
       />
-      <Picker
+      <CustomPicker
         selectedValue={character.ancestry}
-        style={styles.picker}
         onValueChange={itemValue => handleChange(itemValue, 'ancestry')}
-      >
-        {ancestries.map(ancestry => <Picker.Item key={ancestry} label={ancestry} value={ancestry} />)}
-      </Picker>
-      <Picker
+        items={Object.keys(ancestries)}
+        descriptions={ancestries}
+      />
+
+
+      <CustomPicker
         selectedValue={character.background}
-        style={styles.picker}
         onValueChange={itemValue => handleChange(itemValue, 'background')}
-      >
-        {backgrounds.map(background => <Picker.Item key={background} label={background} value={background} />)}
-      </Picker>
-      <Picker
+        items={backgrounds}
+      />
+      <CustomPicker
         selectedValue={character.characterClass}
-        style={styles.picker}
         onValueChange={itemValue => handleChange(itemValue, 'characterClass')}
-      >
-        {classes.map(cClass => <Picker.Item key={cClass} label={cClass} value={cClass} />)}
-      </Picker>
+        items={classes}
+      />
       <Button title="Start Rolling Stats" onPress={() => setModalVisible(true)} />
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
+      <StatRollModal
+        modalVisible={modalVisible}
+        onClose={() => {
           setModalVisible(false);
           setCurrentStatIndex(0); // Reset on close
         }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{statsOrder[currentStatIndex].toUpperCase()}</Text>
-            <Text>Current Roll: {character.stats[statsOrder[currentStatIndex]]}</Text>
-            <Text>Roll Count: {rollCounts[statsOrder[currentStatIndex]]}</Text>
-            <Button title="Roll" onPress={handleRoll} disabled={rollCounts[statsOrder[currentStatIndex]] >= 2} />
-            <Button title="Accept Stat" onPress={finalizeStat} />
-          </View>
-        </View>
-      </Modal>
+        statName={statsOrder[currentStatIndex]}
+        rollCount={rollCounts[statsOrder[currentStatIndex]]}
+        currentRoll={character.stats[statsOrder[currentStatIndex]]}
+        onRoll={handleRoll}
+        onAccept={finalizeStat}
+      />
     </ScrollView>
   );
 };
@@ -147,36 +140,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 10,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  }
 });
 
 export default CreateCharacterScreen;

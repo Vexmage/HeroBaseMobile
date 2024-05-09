@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,11 +15,11 @@ import CharacterDetailScreen from './CharacterDetailScreen';
 
 import { UserProvider, useUser } from '../UserContext';
 
-const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator(); // Create a drawer navigator
+const Stack = createStackNavigator(); // Create a stack navigator
 
-const HomeStack = () => {
-  const { user, logoutUser } = useUser();
+const HomeStack = () => { // Create a stack navigator for the home screen
+  const { user, logoutUser } = useUser(); // Get user and logoutUser from context
 
   return (
     <Stack.Navigator>
@@ -53,13 +54,13 @@ const HomeStack = () => {
   );
 };
 
-const AuthStack = () => (
+const AuthStack = () => ( 
   <Stack.Navigator>
     <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
     <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
   </Stack.Navigator>
 );
-
+//
 const AppNavigation = () => {
   const { user } = useUser();
 

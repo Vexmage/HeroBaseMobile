@@ -23,6 +23,14 @@ const CreateCharacterScreen = ({ navigation }) => {
       charisma: 0
     }
   });
+  const [rollCounts, setRollCounts] = useState({
+    strength: 0,
+    dexterity: 0,
+    constitution: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0
+  });
   const [currentStatIndex, setCurrentStatIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -38,14 +46,19 @@ const CreateCharacterScreen = ({ navigation }) => {
     const newStatValue = rollStat();
     const updatedStats = { ...character.stats, [statName]: newStatValue };
     const updatedCharacter = { ...character, stats: updatedStats };
+    const updatedRollCounts = { ...rollCounts, [statName]: rollCounts[statName] + 1 };
 
     setCharacter(updatedCharacter);
+    setRollCounts(updatedRollCounts);
+  };
+
+  const finalizeStat = () => {
     if (currentStatIndex < statsOrder.length - 1) {
       setCurrentStatIndex(currentStatIndex + 1);
     } else {
       setModalVisible(false);
       setCurrentStatIndex(0);
-      saveCharacter(updatedCharacter); // Save the character when all stats are rolled
+      saveCharacter(character); // Save the character when all stats are rolled
     }
   };
 
@@ -55,14 +68,18 @@ const CreateCharacterScreen = ({ navigation }) => {
 
   const saveCharacter = async (characterData) => {
     try {
-      const jsonValue = JSON.stringify(characterData);
-      await SecureStore.setItemAsync('savedCharacter', jsonValue);
+      const existingCharacters = await SecureStore.getItemAsync('characters');
+      let characters = existingCharacters ? JSON.parse(existingCharacters) : [];
+      characters.push(characterData); // Add the new character to the array
+  
+      await SecureStore.setItemAsync('characters', JSON.stringify(characters));
       alert('Character saved successfully!');
     } catch (e) {
       alert('Failed to save the character.');
       console.error(e);
     }
   };
+  
 
   return (
     <ScrollView style={styles.container}>
@@ -108,7 +125,9 @@ const CreateCharacterScreen = ({ navigation }) => {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{statsOrder[currentStatIndex].toUpperCase()}</Text>
             <Text>Current Roll: {character.stats[statsOrder[currentStatIndex]]}</Text>
-            <Button title="Roll" onPress={handleRoll} />
+            <Text>Roll Count: {rollCounts[statsOrder[currentStatIndex]]}</Text>
+            <Button title="Roll" onPress={handleRoll} disabled={rollCounts[statsOrder[currentStatIndex]] >= 2} />
+            <Button title="Accept Stat" onPress={finalizeStat} />
           </View>
         </View>
       </Modal>

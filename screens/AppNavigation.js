@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -10,10 +10,9 @@ import LoginScreen from './LoginScreen';
 import RegisterScreen from './RegisterScreen';
 import CreateCharacterScreen from './CreateCharacterScreen';
 import ListCharactersScreen from './ListCharactersScreen';
+import CharacterDetailScreen from './CharacterDetailScreen';
 
 import { UserProvider, useUser } from '../UserContext';
-
-
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -24,7 +23,7 @@ const HomeStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="HomeStackScreen"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
           headerRight: () => (
@@ -43,7 +42,12 @@ const HomeStack = () => {
       <Stack.Screen
         name="ListCharacters"
         component={ListCharactersScreen}
-        options={{ title: 'View Characters' }}
+        options={{ title: 'List Characters' }}
+      />
+      <Stack.Screen
+        name="CharacterDetail"
+        component={CharacterDetailScreen}
+        options={{ title: 'Character Details' }}
       />
     </Stack.Navigator>
   );
@@ -51,8 +55,8 @@ const HomeStack = () => {
 
 const AuthStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Login" component={LoginScreen} />
-    <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+    <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
   </Stack.Navigator>
 );
 
@@ -63,8 +67,8 @@ const AppNavigation = () => {
     <NavigationContainer>
       {user ? (
         <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen name="HomeDrawerScreen" component={HomeStack} options={{ title: 'Home' }} />
-          {/* Additional screens can be added here */}
+          <Drawer.Screen name="Home" component={HomeStack} options={{ title: 'Home' }} />
+          {/* Additional drawer items can be added here if needed */}
         </Drawer.Navigator>
       ) : (
         <AuthStack />

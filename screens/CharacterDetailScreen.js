@@ -1,18 +1,26 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import api from '../services/api';
 
-const CharacterDetailScreen = ({ route, navigation }) => { // Destructure route and navigation props
-  const { character } = route.params; // Destructure character from route.params
+const CharacterDetailScreen = ({ route, navigation }) => {
+  const { character } = route.params;
 
-  const deleteCharacter = async () => { // Delete character function
-    const existingCharacters = await SecureStore.getItemAsync('characters'); // Get characters from SecureStore
-    let characters = existingCharacters ? JSON.parse(existingCharacters) : [];  // Parse characters if they exist
-    const filteredCharacters = characters.filter(c => c.name !== character.name); // Filter out the character to delete
-    
-    await SecureStore.setItemAsync('characters', JSON.stringify(filteredCharacters)); // Update characters in SecureStore
-    Alert.alert("Character Deleted", `${character.name} has been successfully deleted.`); // Alert user of successful deletion
-    navigation.goBack(); // Navigate back to the previous screen
+  const deleteCharacter = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      const config = {
+        headers: {
+          'x-auth-token': token,
+        },
+      };
+      console.log(`Deleting character with ID: ${character._id}`); // Debug log
+      await api.delete(`/characters/${character._id}`, config);
+      Alert.alert('Character Deleted', `${character.name} has been successfully deleted.`);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error deleting character:', error);
+    }
   };
 
   return (
@@ -27,7 +35,7 @@ const CharacterDetailScreen = ({ route, navigation }) => { // Destructure route 
       <Text style={styles.detail}>Intelligence: {character.stats.intelligence}</Text>
       <Text style={styles.detail}>Wisdom: {character.stats.wisdom}</Text>
       <Text style={styles.detail}>Charisma: {character.stats.charisma}</Text>
-      <Button title="Delete Character" color="#B22222" onPress={() => deleteCharacter()} />
+      <Button title="Delete Character" color="#B22222" onPress={deleteCharacter} />
     </View>
   );
 };

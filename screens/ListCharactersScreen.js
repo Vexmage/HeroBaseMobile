@@ -1,27 +1,36 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
+import api from '../services/api';
+import { useUser } from '../UserContext';
 
-const ListCharactersScreen = ({ navigation }) => { // Passing navigation prop
-  const [characters, setCharacters] = useState([]); // Initialize characters state
+const ListCharactersScreen = ({ navigation }) => {
+  const [characters, setCharacters] = useState([]);
+  const { user } = useUser();
 
-  const loadCharacters = async () => { // Load characters from SecureStore
-    const charactersData = await SecureStore.getItemAsync('characters'); // Get characters from SecureStore
-    if (charactersData) { // If characters exist
-      setCharacters(JSON.parse(charactersData)); // Set characters in state
-    } else {
-      setCharacters([]);  // Ensure to reset the state if there are no characters
+  const loadCharacters = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      const config = {
+        headers: {
+          'x-auth-token': token,
+        },
+      };
+      const response = await api.get('/characters', config);
+      setCharacters(response.data);
+    } catch (error) {
+      console.error('Error loading characters:', error);
     }
   };
 
-  useFocusEffect( // Use useFocusEffect hook
-    useCallback(() => { // Callback function
-      loadCharacters(); // Call loadCharacters function
+  useFocusEffect(
+    useCallback(() => {
+      loadCharacters();
     }, [])
   );
 
-  const renderItem = ({ item }) => ( // Render character item
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
       onPress={() => navigation.navigate('CharacterDetail', { character: item })}
@@ -35,7 +44,7 @@ const ListCharactersScreen = ({ navigation }) => { // Passing navigation prop
       <FlatList
         data={characters}
         renderItem={renderItem}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item._id}
       />
     </View>
   );

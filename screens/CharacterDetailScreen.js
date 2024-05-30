@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
-import { View, Text, StyleSheet } from 'react-native';
+const CharacterDetailScreen = ({ route, navigation }) => { // Destructure route and navigation props
+  const { character } = route.params; // Destructure character from route.params
 
-const CharacterDetailScreen = ({ route }) => {
-  const { character } = route.params;
+  const deleteCharacter = async () => { // Delete character function
+    const existingCharacters = await SecureStore.getItemAsync('characters'); // Get characters from SecureStore
+    let characters = existingCharacters ? JSON.parse(existingCharacters) : [];  // Parse characters if they exist
+    const filteredCharacters = characters.filter(c => c.name !== character.name); // Filter out the character to delete
+    
+    await SecureStore.setItemAsync('characters', JSON.stringify(filteredCharacters)); // Update characters in SecureStore
+    Alert.alert("Character Deleted", `${character.name} has been successfully deleted.`); // Alert user of successful deletion
+    navigation.goBack(); // Navigate back to the previous screen
+  };
 
   return (
     <View style={styles.container}>
@@ -17,6 +27,7 @@ const CharacterDetailScreen = ({ route }) => {
       <Text style={styles.detail}>Intelligence: {character.stats.intelligence}</Text>
       <Text style={styles.detail}>Wisdom: {character.stats.wisdom}</Text>
       <Text style={styles.detail}>Charisma: {character.stats.charisma}</Text>
+      <Button title="Delete Character" color="#B22222" onPress={() => deleteCharacter()} />
     </View>
   );
 };
@@ -26,16 +37,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20
+    padding: 20,
+    backgroundColor: '#3C2F2F',
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 20,
+    color: '#FFD700',
+    fontFamily: 'ConanFont',
   },
   detail: {
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 10,
+    color: '#FFD700',
+    fontFamily: 'ConanFont',
   }
 });
 

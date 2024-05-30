@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import WelcomeScreen from './WelcomeScreen';
 import HomeScreen from './HomeScreen';
 import LoginScreen from './LoginScreen';
 import RegisterScreen from './RegisterScreen';
 import CreateCharacterScreen from './CreateCharacterScreen';
 import ListCharactersScreen from './ListCharactersScreen';
 import CharacterDetailScreen from './CharacterDetailScreen';
+import AboutScreen from './AboutScreen';
 
 import { UserProvider, useUser } from '../UserContext';
 
 const Drawer = createDrawerNavigator(); // Create a drawer navigator
 const Stack = createStackNavigator(); // Create a stack navigator
 
-const HomeStack = () => { // Create a stack navigator for the home screen
+const HomeStack = () => {
   const { user, logoutUser } = useUser(); // Get user and logoutUser from context
 
   return (
@@ -35,32 +36,21 @@ const HomeStack = () => { // Create a stack navigator for the home screen
           )
         }}
       />
-      <Stack.Screen
-        name="CreateCharacter"
-        component={CreateCharacterScreen}
-        options={{ title: 'Create Character' }}
-      />
-      <Stack.Screen
-        name="ListCharacters"
-        component={ListCharactersScreen}
-        options={{ title: 'List Characters' }}
-      />
-      <Stack.Screen
-        name="CharacterDetail"
-        component={CharacterDetailScreen}
-        options={{ title: 'Character Details' }}
-      />
+      <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} options={{ title: 'Create Character' }} />
+      <Stack.Screen name="ListCharacters" component={ListCharactersScreen} options={{ title: 'List Characters' }} />
+      <Stack.Screen name="CharacterDetail" component={CharacterDetailScreen} options={{ title: 'Character Details' }} />
     </Stack.Navigator>
   );
 };
 
-const AuthStack = () => ( 
+const AuthStack = () => (
   <Stack.Navigator>
+    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ title: 'Welcome' }} />
     <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
     <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
   </Stack.Navigator>
 );
-//
+
 const AppNavigation = () => {
   const { user } = useUser();
 
@@ -69,7 +59,7 @@ const AppNavigation = () => {
       {user ? (
         <Drawer.Navigator initialRouteName="Home">
           <Drawer.Screen name="Home" component={HomeStack} options={{ title: 'Home' }} />
-          {/* Additional drawer items can be added here if needed */}
+          <Drawer.Screen name="About" component={AboutScreen} options={{ title: 'About' }} />
         </Drawer.Navigator>
       ) : (
         <AuthStack />

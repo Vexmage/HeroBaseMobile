@@ -1,32 +1,37 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'; // Importing createContext, useContext, useState, and useEffect
-import * as SecureStore from 'expo-secure-store'; // Import SecureStore
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import jwtDecode from 'jwt-decode';
 
-const UserContext = createContext(null); // Create a context for the user
+const UserContext = createContext();
 
-export const UserProvider = ({ children }) => { // Create a provider for the user
-    const [user, setUser] = useState(null); // Initialize user state
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-    useEffect(() => { // Check for user in SecureStore if not in context
-        SecureStore.getItemAsync('user').then(storedUser => { // Get user from SecureStore
-            setUser(storedUser); // Set user in context
-        });
-    }, []);
+  const loginUser = (username) => {
+    setUser(username);
+  };
 
-    const loginUser = async (username) => { // Login user
-        await SecureStore.setItemAsync('user', username); // Store user in SecureStore
-        setUser(username); // Set user in context
+  const logoutUser = async () => {
+    await SecureStore.deleteItemAsync('token');
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const token = await SecureStore.getItemAsync('token');
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        setUser(decodedToken.user.username);
+      }
     };
+    loadUser();
+  }, []);
 
-    const logoutUser = async () => { // Logout user
-        await SecureStore.deleteItemAsync('user'); // Remove user from SecureStore
-        setUser(null); // Remove user from context
-    };
-
-    return ( 
-        <UserContext.Provider value={{ user, loginUser, logoutUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider value={{ user, loginUser, logoutUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export const useUser = () => useContext(UserContext); // Create a hook to use the user context
+export const useUser = () => useContext(UserContext);

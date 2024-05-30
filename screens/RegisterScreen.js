@@ -1,30 +1,29 @@
-import React, { useState } from 'react'; // Importing useState
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native'; // Importing components
-import * as SecureStore from 'expo-secure-store'; // Import SecureStore
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import api from '../services/api';
 
-export default function RegisterScreen({ navigation }) { // Passing navigation prop
-  const [username, setUsername] = useState(''); // Username state
-  const [password, setPassword] = useState(''); // Password state
-  const [confirmPassword, setConfirmPassword] = useState(''); // Confirm password state
-  const [errorMessage, setErrorMessage] = useState(''); // Error message state
+export default function RegisterScreen({ navigation }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-
-const handleRegister = async () => { // Handle registration
-  if (password !== confirmPassword) { // Check if passwords match
-      setErrorMessage('Passwords do not match'); // Update error message
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
       return;
-  }
-  // Check if user already exists
-  const userExists = await SecureStore.getItemAsync(username); // Get user from SecureStore
-  if (userExists) { 
-      setErrorMessage('Username already taken');
-      return;
-  }
-  await SecureStore.setItemAsync(username, password); // Store user in SecureStore
-  await SecureStore.setItemAsync('user', username);  // Log in the user immediately
-  navigation.navigate('Home'); // Navigate to the Home screen
-};
+    }
 
+    try {
+      const response = await api.post('/auth/register', { username, password });
+      const { token } = response.data;
+      await SecureStore.setItemAsync('token', token);
+      await SecureStore.setItemAsync('user', username);
+      navigation.navigate('Home', { screen: 'HomeScreen' });
+    } catch (error) {
+      setErrorMessage('Registration failed: ' + error.response.data.msg);
+    }
+  };
 
   return (
     <View style={styles.container}>

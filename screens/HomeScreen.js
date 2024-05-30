@@ -1,47 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { useUser } from '../UserContext';
 
 export default function HomeScreen({ navigation }) {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     const checkUser = async () => {
       if (!user) {
         const storedUser = await SecureStore.getItemAsync('user');
         if (storedUser) {
-          console.log('User loaded from store:', storedUser);
-        } else {
-          console.log('No user in store');
+          setUser(storedUser);
         }
       }
     };
 
     checkUser();
-  }, [user]);
+  }, [user, setUser]);
 
   return (
     <View style={styles.container}>
       {user ? (
         <>
           <Text style={styles.welcomeText}>Hello, {user}</Text>
-          <Button
-            title="Create Character"
-            onPress={() => navigation.navigate('CreateCharacter')}
-            style={styles.button}
-          />
-          <Button
-            title="View Characters"
-            onPress={() => navigation.navigate('ListCharacters')}
-            style={styles.button}
-          />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateCharacter')}>
+            <Text style={styles.buttonText}>Create Character</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListCharacters')}>
+            <Text style={styles.buttonText}>View Characters</Text>
+          </TouchableOpacity>
         </>
       ) : (
         <View style={styles.buttonContainer}>
-          <Button title="Login" onPress={() => navigation.navigate('Login')} style={styles.button} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
           <View style={styles.space} />
-          <Button title="Register" onPress={() => navigation.navigate('Register')} style={styles.button} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -54,10 +52,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#3C2F2F',
   },
   welcomeText: {
     fontSize: 22,
     marginBottom: 20,
+    color: '#FFD700',
+    fontFamily: 'ConanFont',
   },
   buttonContainer: {
     width: '100%',
@@ -65,7 +66,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    marginVertical: 10,
+    backgroundColor: '#704214',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '80%',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#FFD700',
+    fontSize: 18,
   },
   space: {
     height: 20,

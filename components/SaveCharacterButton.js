@@ -3,18 +3,18 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import api from '../services/api';
 import * as SecureStore from 'expo-secure-store';
 
-const SaveCharacterButton = ({ character, navigation }) => {
-  const saveCharacter = async () => {
+const SaveCharacterButton = ({ character, navigation }) => { // SaveCharacterButton component
+  const saveCharacter = async () => { // Save character
     try {
       const token = await SecureStore.getItemAsync('token');
       if (!token) {
         alert('User is not authenticated');
         return;
       }
-
+// Save character
       const config = {
         headers: {
-          'x-auth-token': token,
+          'x-auth-token': token, // Set token in request header
         },
       };
 
@@ -22,7 +22,7 @@ const SaveCharacterButton = ({ character, navigation }) => {
       const response = await api.post('/characters', character, config);
       console.log('Character saved response:', response.data); // Debug log
       alert('Character saved successfully!');
-      navigation.navigate('Home'); // Ensure 'Home' screen is defined in navigation
+      navigation.navigate('Home'); // Navigate to Home screen -- may be an issue
     } catch (e) {
       console.error('Error saving character:', e.response ? e.response.data : e.message); // Detailed error log
       alert('Failed to save the character.');

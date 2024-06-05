@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StatRollModal from './StatRollModal';
-
+// StatRoller component
 const StatRoller = ({ character, setCharacter, modalVisible, setModalVisible }) => {
   const [currentStatIndex, setCurrentStatIndex] = useState(0);
   const [rollCounts, setRollCounts] = useState({
@@ -12,14 +12,14 @@ const StatRoller = ({ character, setCharacter, modalVisible, setModalVisible }) 
     charisma: 0
   });
   const statsOrder = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
+// Roll a stat
   const rollStat = () => {
     let rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
     rolls.sort();
     rolls.shift();
     return rolls.reduce((a, b) => a + b, 0);
   };
-
+// Handle roll
   const handleRoll = () => {
     const newStatValue = rollStat();
     const updatedStats = { ...character.stats, [statsOrder[currentStatIndex]]: newStatValue };
@@ -28,7 +28,7 @@ const StatRoller = ({ character, setCharacter, modalVisible, setModalVisible }) 
     setCharacter({ ...character, stats: updatedStats });
     setRollCounts(updatedRollCounts);
   };
-
+// Finalize stat
   const finalizeStat = () => {
     if (currentStatIndex < statsOrder.length - 1) {
       setCurrentStatIndex(currentStatIndex + 1);

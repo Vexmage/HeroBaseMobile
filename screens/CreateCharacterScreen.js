@@ -20,10 +20,11 @@ import cleric from '../data/classes/cleric.json';
 import fighter from '../data/classes/fighter.json';
 import rogue from '../data/classes/rogue.json';
 
-const ancestries = { dwarf, elf, halfling, human };
-const backgrounds = { criminal, merchant, scholar, warrior };
-const classes = { bard, cleric, fighter, rogue };
+const ancestries = { dwarf, elf, halfling, human }; // Ancestries
+const backgrounds = { criminal, merchant, scholar, warrior }; // Backgrounds
+const classes = { bard, cleric, fighter, rogue }; // Classes
 
+// CreateCharacterScreen component
 const CreateCharacterScreen = ({ navigation }) => {
   const [character, setCharacter] = useState({
     name: '',
@@ -40,9 +41,9 @@ const CreateCharacterScreen = ({ navigation }) => {
     }
   });
 
-  const [statModalVisible, setStatModalVisible] = useState(false);
+  const [statModalVisible, setStatModalVisible] = useState(false); // Stat modal visibility
 
-  useEffect(() => {
+  useEffect(() => { // Log data on component mount
     console.log("Ancestries:", ancestries);
     console.log("Backgrounds:", backgrounds);
     console.log("Classes:", classes);

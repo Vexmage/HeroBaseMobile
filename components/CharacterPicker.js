@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, Button } from 'react-native';
 import { Picker as RNPicker } from '@react-native-picker/picker';
 
-const CharacterPicker = ({ selectedValue, onValueChange, items }) => {
+const CharacterPicker = ({ selectedValue, onValueChange, items }) => { // CharacterPicker component
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedValue);
 
-  const handleValueChange = (itemValue) => {
+  const handleValueChange = (itemValue) => { // Handle value change
     setSelectedItem(itemValue);
     setModalVisible(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = () => { // Handle confirm
     onValueChange(selectedItem);
     setModalVisible(false);
   };

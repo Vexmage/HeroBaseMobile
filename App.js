@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync(); // Prevent auto-hide until everything is loaded
 
-const fetchFonts = () => {
+const fetchFonts = () => { // Load custom font
   return Font.loadAsync({
     'ConanFont': require('./assets/fonts/Crom_v1.ttf'), // Ensure the path is correct
   });

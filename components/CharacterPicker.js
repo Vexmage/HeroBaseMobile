@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, Modal, Button } from 'react-native';
 import { Picker as RNPicker } from '@react-native-picker/picker';
 
-const CustomPicker = ({ selectedValue, onValueChange, items }) => {
+const CharacterPicker = ({ selectedValue, onValueChange, items }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedValue);
 
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomPicker;
+export default CharacterPicker;

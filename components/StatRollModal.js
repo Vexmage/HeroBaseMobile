@@ -1,13 +1,11 @@
-// components/StatRollModal.js
 
 // What is StatRollModal.js?
 // StatRollModal.js is a component that displays a modal with information about a stat roll.
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Import React and useState
+import { Modal, View, Text, Button, StyleSheet } from 'react-native'; // Import Modal, View, Text, Button, and StyleSheet components
 
-import { Modal, View, Text, Button, StyleSheet } from 'react-native';
-
-const StatRollModal = ({ modalVisible, onClose, statName, rollCount, currentRoll, onRoll, onAccept }) => {
+const StatRollModal = ({ modalVisible, onClose, statName, rollCount, currentRoll, onRoll, onAccept }) => { // StatRollModal component
   return (
     <Modal
       animationType="slide"

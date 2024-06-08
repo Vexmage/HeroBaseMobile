@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, Button } from 'react-native';
-import { Picker as RNPicker } from '@react-native-picker/picker';
+import React, { useState } from 'react'; // Import React and useState
+import { View, Text, StyleSheet, Modal, Button } from 'react-native'; // Import View, Text, StyleSheet, Modal, and Button components
+import { Picker as RNPicker } from '@react-native-picker/picker'; // Import Picker component from @react-native-picker/picker
+
+// The code below is a component that displays a picker with a modal that shows the description of the selected item.
+// The component takes three props: selectedValue, onValueChange, and items.
+// selectedValue is the currently selected value.
+// onValueChange is a function that is called when the selected value changes.
+// items is an object that contains the items to be displayed in the picker.
+// The component renders a RNPicker component with the items passed as props.
+// When the value of the picker changes, the handleValueChange function is called, 
+// hich updates the selected item and opens the modal.
 
 const CharacterPicker = ({ selectedValue, onValueChange, items }) => { // CharacterPicker component
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(selectedValue);
+  const [modalVisible, setModalVisible] = useState(false); // Modal visibility
+  const [selectedItem, setSelectedItem] = useState(selectedValue); // Selected item
 
   const handleValueChange = (itemValue) => { // Handle value change
-    setSelectedItem(itemValue);
-    setModalVisible(true);
+    setSelectedItem(itemValue); // Update selected item
+    setModalVisible(true); // Open modal
   };
 
   const handleConfirm = () => { // Handle confirm
-    onValueChange(selectedItem);
-    setModalVisible(false);
+    onValueChange(selectedItem); // Update selected value
+    setModalVisible(false); // Close modal
   };
 
   return (

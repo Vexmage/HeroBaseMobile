@@ -1,17 +1,21 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
-import api from '../services/api';
+import React from 'react'; // Import React
+import { View, Text, Button, StyleSheet, Alert } from 'react-native'; // Import View, Text, Button, StyleSheet, and Alert components
+import * as SecureStore from 'expo-secure-store'; // Import SecureStore from Expo
+import api from '../services/api'; // Import api from services/api
 
-const CharacterDetailScreen = ({ route, navigation }) => {
-  const { character } = route.params;
+// CharacterDetailScreen component
+// Displays the details of a character
+// Allows the user to delete the character
 
-  const deleteCharacter = async () => {
+const CharacterDetailScreen = ({ route, navigation }) => { // CharacterDetailScreen component
+  const { character } = route.params; // Destructure the character from the route params
+
+  const deleteCharacter = async () => { // Delete character function
     try {
-      const token = await SecureStore.getItemAsync('token');
-      const config = {
-        headers: {
-          'x-auth-token': token,
+      const token = await SecureStore.getItemAsync('token'); // Get token from SecureStore
+      const config = { // Configuration object
+        headers: { // Headers object
+          'x-auth-token': token, // Set token in request header
         },
       };
       console.log(`Deleting character with ID: ${character._id}`); // Debug log

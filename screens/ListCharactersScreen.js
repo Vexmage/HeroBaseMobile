@@ -5,16 +5,21 @@ import * as SecureStore from 'expo-secure-store';
 import api from '../services/api';
 import { useUser } from '../UserContext';
 
-const ListCharactersScreen = ({ navigation }) => {
-  const [characters, setCharacters] = useState([]);
-  const { user } = useUser();
+// ListCharactersScreen component
+// List all characters for the authenticated user
+// Uses the useFocusEffect hook to reload characters when the screen is focused
+// Displays a list of characters with a touchable item to navigate to the CharacterDetail screen
 
-  const loadCharacters = async () => {
+const ListCharactersScreen = ({ navigation }) => { // ListCharactersScreen component
+  const [characters, setCharacters] = useState([]); // Characters state
+  const { user } = useUser(); // Destructure the user from the useUser hook
+
+  const loadCharacters = async () => { // Load characters function
     try {
-      const token = await SecureStore.getItemAsync('token');
-      const config = {
-        headers: {
-          'x-auth-token': token,
+      const token = await SecureStore.getItemAsync('token'); // Get token from SecureStore
+      const config = { // Configuration object
+        headers: { // Headers object
+          'x-auth-token': token, // Set token in request header
         },
       };
       const response = await api.get('/characters', config);
@@ -24,21 +29,26 @@ const ListCharactersScreen = ({ navigation }) => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      loadCharacters();
+
+  useFocusEffect( // useFocusEffect hook
+    useCallback(() => { // Callback function
+      loadCharacters(); // Load characters
     }, [])
   );
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => navigation.navigate('CharacterDetail', { character: item })}
+  const renderItem = ({ item }) => ( // Render item function
+    <TouchableOpacity // TouchableOpacity component
+      style={styles.item} // Style
+      onPress={() => navigation.navigate('CharacterDetail', { character: item })} // Navigation to CharacterDetail screen
     >
       <Text style={styles.title}>{item.name}</Text>
     </TouchableOpacity>
   );
 
+  // Return JSX
+  // FlatList component to display the list of characters
+  // TouchableOpacity component for each character item
+  
   return (
     <View style={styles.container}>
       <FlatList

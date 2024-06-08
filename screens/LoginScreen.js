@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
-import api from '../services/api';
-import { useUser } from '../UserContext';
+import React, { useState } from 'react'; // Import React and useState
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native'; // Import View, TextInput, Text, StyleSheet, and TouchableOpacity components
+import * as SecureStore from 'expo-secure-store'; // Import SecureStore for storing sensitive data
+import api from '../services/api'; // Import the API module
+import { useUser } from '../UserContext'; // Import the useUser hook
 
-function LoginScreen({ navigation }) {
-  const { loginUser } = useUser();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+function LoginScreen({ navigation }) { // LoginScreen component
+  const { loginUser } = useUser(); // Destructure the loginUser function from the useUser hook
+  const [username, setUsername] = useState(''); // Username state
+  const [password, setPassword] = useState(''); // Password state
+  const [error, setError] = useState(''); // Error state
 
-  const handleLogin = async () => {
-    try {
-      const payload = { username, password };
+  const handleLogin = async () => { // Handle login
+    try { // Try to login
+      const payload = { username, password }; // Payload object with username and password
       console.log('Sending payload:', payload); // Debug log
-      const response = await api.post('/auth/login', payload);
-      const { token } = response.data;
+      const response = await api.post('/auth/login', payload); // Send login request
+      const { token } = response.data; // Extract token from response data
 
       await SecureStore.setItemAsync('token', token); // Store the token
 

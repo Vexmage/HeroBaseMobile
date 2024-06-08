@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Button } from 'react-native';
-import CharacterInput from '../components/CharacterInput';
-import CharacterPicker from '../components/CharacterPicker';
-import StatRoller from '../components/StatRoller';
-import SaveCharacterButton from '../components/SaveCharacterButton';
+import React, { useState, useEffect } from 'react'; // Import React and useState, useEffect hooks
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Button } from 'react-native'; // Import View, Text, StyleSheet, ScrollView, and SafeAreaView components
+import CharacterInput from '../components/CharacterInput'; // Import CharacterInput component
+import CharacterPicker from '../components/CharacterPicker'; // Import CharacterPicker component
+import StatRoller from '../components/StatRoller'; // Import StatRoller component
+import SaveCharacterButton from '../components/SaveCharacterButton'; // Import SaveCharacterButton component
 
+// Let's talk about how we import these json files into our project and why
+// We import these json files to use them as data for our character creation screen
+//
+ 
 import dwarf from '../data/ancestries/dwarf.json';
 import elf from '../data/ancestries/elf.json';
 import halfling from '../data/ancestries/halfling.json';
@@ -25,12 +29,12 @@ const backgrounds = { criminal, merchant, scholar, warrior }; // Backgrounds
 const classes = { bard, cleric, fighter, rogue }; // Classes
 
 // CreateCharacterScreen component
-const CreateCharacterScreen = ({ navigation }) => {
-  const [character, setCharacter] = useState({
+const CreateCharacterScreen = ({ navigation }) => { // Pass navigation prop
+  const [character, setCharacter] = useState({ // Character state
     name: '',
-    ancestry: Object.keys(ancestries)[0],
-    background: Object.keys(backgrounds)[0],
-    characterClass: Object.keys(classes)[0],
+    ancestry: Object.keys(ancestries)[0], // Default ancestry
+    background: Object.keys(backgrounds)[0], // Default background
+    characterClass: Object.keys(classes)[0], // Default class
     stats: {
       strength: 0,
       dexterity: 0,

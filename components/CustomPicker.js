@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Button } from 'react-native';
-import { Picker as RNPicker } from '@react-native-picker/picker';
+import React, { useState } from 'react'; // Import React and useState
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Button } from 'react-native'; // Import View, Text, StyleSheet, Modal, TouchableOpacity, and Button components
+import { Picker as RNPicker } from '@react-native-picker/picker'; // Import Picker component from @react-native-picker/picker
 
-const CustomPicker = ({ selectedValue, onValueChange, items }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(selectedValue);
+const CustomPicker = ({ selectedValue, onValueChange, items }) => { // CustomPicker component
+  const [modalVisible, setModalVisible] = useState(false); // Modal visibility
+  const [selectedItem, setSelectedItem] = useState(selectedValue); // Selected item
 
-  const handleValueChange = (itemValue) => {
-    setSelectedItem(itemValue);
-    setModalVisible(true);
+  const handleValueChange = (itemValue) => { // Handle value change
+    setSelectedItem(itemValue); // Update selected item
+    setModalVisible(true); // Open modal
   };
 
-  const handleConfirm = () => {
-    onValueChange(selectedItem);
-    setModalVisible(false);
+  const handleConfirm = () => { // Handle confirm
+    onValueChange(selectedItem); // Update selected value
+    setModalVisible(false); // Close modal
   };
 
   return (

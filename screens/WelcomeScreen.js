@@ -1,9 +1,10 @@
 
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React from 'react'; // Import React
+import { View, Text, Button, StyleSheet } from 'react-native'; // Import View, Text, Button, and StyleSheet components
 
 const WelcomeScreen = ({ navigation }) => { // Pass navigation prop
-    return (
+    // Return JSX
+    return ( 
         <View style={styles.container}>
             <Text style={styles.title}>Adventure Awaits!</Text>
             <View style={styles.buttonContainer}>

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react'; // Import React and useState
+import { View, TextInput, Text, StyleSheet } from 'react-native'; // Import View, TextInput, Text, and StyleSheet components
 
 // CharacterInput component
-const CharacterInput = ({ value, onChange }) => { 
+const CharacterInput = ({ value, onChange }) => { // CharacterInput component
   const [error, setError] = useState(''); // Error state
 
   // Handle input change
-  const handleChange = (text) => { 
+  const handleChange = (text) => { // Handle input change
     if (text.length > 0 && !/^[A-Za-z]/.test(text)) { // Check if name starts with a letter
       setError('Name must start with a letter');
     } else if (text.length > 0 && text.length < 2) { // Check if name is at least 2 characters long

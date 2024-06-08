@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
-import api from '../services/api';
+import React, { useState } from 'react'; // Import React and useState hook
+import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native'; // Import components from React Native
+import * as SecureStore from 'expo-secure-store'; // SecureStore for storing sensitive data
+import api from '../services/api'; // Import the API module
 
-export default function RegisterScreen({ navigation }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+export default function RegisterScreen({ navigation }) { // Navigation prop is passed to the component
+  const [username, setUsername] = useState(''); // Username state
+  const [password, setPassword] = useState(''); // Password state
+  const [confirmPassword, setConfirmPassword] = useState(''); // Confirm password state
+  const [errorMessage, setErrorMessage] = useState(''); // Error message state
+  const [successMessage, setSuccessMessage] = useState(''); // Success message state
 
-  const handleRegister = async () => {
-    setErrorMessage('');
-    setSuccessMessage('');
+  const handleRegister = async () => { // Handle registration
+    setErrorMessage(''); // Clear error message
+    setSuccessMessage(''); // Clear success message
 
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+    if (password !== confirmPassword) { // If passwords do not match
+      setErrorMessage('Passwords do not match'); // Set error message
       return;
     }
 
-    try {
-      const response = await api.post('/auth/register', { username, password });
-      const { token } = response.data;
-      await SecureStore.setItemAsync('token', token);
-      await SecureStore.setItemAsync('user', username);
-      setSuccessMessage('Registration successful! Redirecting to home...');
-      setTimeout(() => {
-        navigation.navigate('Home', { screen: 'HomeScreen' });
+    try { // Try block for registration
+      const response = await api.post('/auth/register', { username, password }); // Send registration request
+      const { token } = response.data; // Extract token from response data
+      await SecureStore.setItemAsync('token', token); // Store the token in SecureStore
+      await SecureStore.setItemAsync('user', username); // Store the username in SecureStore
+      setSuccessMessage('Registration successful! Redirecting to Welcome Screen, please login.'); // Set success message
+      setTimeout(() => { // Delay navigation
+        navigation.navigate('Welcome', { screen: 'WelcomeScreen' }); // Navigate to the Welcome screen
       }, 1000); // Delay navigation to show the success message
-    } catch (error) {
-      setErrorMessage('Registration failed: ' + (error.response?.data?.msg || error.message));
+    } catch (error) { // Catch any errors
+      setErrorMessage('Registration failed: ' + (error.response?.data?.msg || error.message)); // Set error message
     }
   };
 

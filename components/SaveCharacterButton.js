@@ -6,13 +6,13 @@ import * as SecureStore from 'expo-secure-store';
 const SaveCharacterButton = ({ character, navigation }) => { // SaveCharacterButton component
   const saveCharacter = async () => { // Save character
     try {
-      const token = await SecureStore.getItemAsync('token');
-      if (!token) {
+      const token = await SecureStore.getItemAsync('token'); // Get token from SecureStore
+      if (!token) { // If token is not found
         alert('User is not authenticated');
         return;
       }
 // Save character
-      const config = {
+      const config = { // Configuration object
         headers: {
           'x-auth-token': token, // Set token in request header
         },

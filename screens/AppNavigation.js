@@ -1,3 +1,4 @@
+// AppNavigation.js
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,11 +17,11 @@ import AboutScreen from './AboutScreen';
 
 import { UserProvider, useUser } from '../UserContext';
 
-const Drawer = createDrawerNavigator(); // Create a drawer navigator
-const Stack = createStackNavigator(); // Create a stack navigator
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 const HomeStack = () => {
-  const { user, logoutUser } = useUser(); // Get user and logoutUser from context
+  const { user, logoutUser } = useUser();
 
   return (
     <Stack.Navigator>
@@ -33,7 +34,8 @@ const HomeStack = () => {
               <Text style={{ marginRight: 10 }}>Hello, {user}</Text>
               <Ionicons name="log-out-outline" size={25} onPress={logoutUser} />
             </View>
-          )
+          ),
+          title: "Home", // optional, shows 'Home' instead of 'HomeScreen'
         }}
       />
       <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} options={{ title: 'Create Character' }} />

@@ -8,10 +8,10 @@ import axios from 'axios'; // Import axios
 // headers are set to 'Content-Type': 'application/json' which is the default content type
 // This instance is then exported to be used in other files.
 
-const api = axios.create({ // Create an axios instance
-  baseURL: 'http://192.168.1.15:5000/api', // Use your backend URL
-  headers: { // Set the headers
-    'Content-Type': 'application/json', // Set the default content type
+const api = axios.create({
+  baseURL: 'http://192.168.1.33:5000/api',
+  headers: {
+    'Content-Type': 'application/json',
   },
 });
 

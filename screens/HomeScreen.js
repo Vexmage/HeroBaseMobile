@@ -15,7 +15,6 @@ export default function HomeScreen({ navigation }) {
         }
       }
     };
-
     checkUser();
   }, [user, setUser]);
 
@@ -24,20 +23,32 @@ export default function HomeScreen({ navigation }) {
       {user ? (
         <>
           <Text style={styles.welcomeText}>Hello, {user}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateCharacter')}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('CreateCharacter')}
+          >
             <Text style={styles.buttonText}>Create Character</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListCharacters')}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ListCharacters')}
+          >
             <Text style={styles.buttonText}>View Characters</Text>
           </TouchableOpacity>
         </>
       ) : (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Login')}
+          >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View style={styles.space} />
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Register')}
+          >
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
         </View>

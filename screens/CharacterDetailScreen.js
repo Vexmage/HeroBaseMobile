@@ -10,22 +10,31 @@ import api from '../services/api'; // Import api from services/api
 const CharacterDetailScreen = ({ route, navigation }) => { // CharacterDetailScreen component
   const { character } = route.params; // Destructure the character from the route params
 
-  const deleteCharacter = async () => { // Delete character function
-    try {
-      const token = await SecureStore.getItemAsync('token'); // Get token from SecureStore
-      const config = { // Configuration object
-        headers: { // Headers object
-          'x-auth-token': token, // Set token in request header
-        },
-      };
-      console.log(`Deleting character with ID: ${character._id}`); // Debug log
-      await api.delete(`/characters/${character._id}`, config);
-      Alert.alert('Character Deleted', `${character.name} has been successfully deleted.`);
-      navigation.goBack();
-    } catch (error) {
-      console.error('Error deleting character:', error);
-    }
-  };
+const confirmDelete = () => {
+  Alert.alert(
+    'Delete Character',
+    `Are you sure you want to delete ${character.name}?`,
+    [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', onPress: handleDelete, style: 'destructive' },
+    ]
+  );
+};
+
+const handleDelete = async () => {
+  try {
+    const token = await SecureStore.getItemAsync('token');
+    const config = {
+      headers: { 'x-auth-token': token },
+    };
+    await api.delete(`/characters/${character._id}`, config);
+    Alert.alert('Character Deleted', `${character.name} has been successfully deleted.`);
+    navigation.goBack();
+  } catch (error) {
+    console.error('Error deleting character:', error);
+  }
+};
+
 
   return (
     <View style={styles.container}>
@@ -39,7 +48,8 @@ const CharacterDetailScreen = ({ route, navigation }) => { // CharacterDetailScr
       <Text style={styles.detail}>Intelligence: {character.stats.intelligence}</Text>
       <Text style={styles.detail}>Wisdom: {character.stats.wisdom}</Text>
       <Text style={styles.detail}>Charisma: {character.stats.charisma}</Text>
-      <Button title="Delete Character" color="#B22222" onPress={deleteCharacter} />
+      <Button title="Delete Character" color="#B22222" onPress={confirmDelete} />
+
     </View>
   );
 };

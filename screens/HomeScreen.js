@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { useUser } from '../UserContext';
 import { Ionicons } from '@expo/vector-icons';
+import { ImageBackground } from 'react-native';
+
 
 
 export default function HomeScreen({ navigation }) {
@@ -21,30 +23,35 @@ export default function HomeScreen({ navigation }) {
   }, [user, setUser]);
 
   return (
+
+
+
+<ImageBackground
+  source={require('../assets/images/map-bg.jpg')}
+  resizeMode="cover"
+  style={styles.background}
+>
     <View style={styles.container}>
-      {user ? (
-        <>
-          <Text style={styles.welcomeText}>Hello, {user}</Text>
+{user ? (
+  <>
+    <Text style={styles.welcomeText}>Hello, {user}</Text>
 
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateCharacter')}>
-            <View style={styles.buttonContent}>
-              <Ionicons name="create-outline" size={20} color="#FFD700" style={styles.icon} />
-              <Text style={styles.buttonText}>Create Character</Text>
-            </View>
-          </TouchableOpacity>
+    <View style={styles.buttonBlock}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateCharacter')}>
+        <View style={styles.buttonContent}>
+          <Ionicons name="create-outline" size={20} color="#FFD700" style={styles.icon} />
+          <Text style={styles.buttonText}>Create Character</Text>
+        </View>
+      </TouchableOpacity>
 
-
-
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListCharacters')}>
-            <View style={styles.buttonContent}>
-              <Ionicons name="person-outline" size={20} color="#FFD700" style={styles.icon} />
-              <Text style={styles.buttonText}>View Characters</Text>
-            </View>
-          </TouchableOpacity>
-
-
-
-        </>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListCharacters')}>
+        <View style={styles.buttonContent}>
+          <Ionicons name="person-outline" size={20} color="#FFD700" style={styles.icon} />
+          <Text style={styles.buttonText}>View Characters</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  </>
       ) : (
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -63,6 +70,9 @@ export default function HomeScreen({ navigation }) {
         </View>
       )}
     </View>
+</ImageBackground>
+
+
   );
 }
 
@@ -111,6 +121,24 @@ button: {
   icon: {
     marginRight: 8,
   },
+  background: {
+  flex: 1,
+  width: '100%',
+  height: '100%',
+},
+container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+  backgroundColor: 'rgba(60, 47, 47, 0.7)', // Same tone, just semi-transparent
+},
+overlay: {
+  backgroundColor: 'rgba(60, 47, 47, 0.8)',
+  padding: 20,
+  borderRadius: 12,
+  alignItems: 'center',
+},
 
   space: {
     height: 20,

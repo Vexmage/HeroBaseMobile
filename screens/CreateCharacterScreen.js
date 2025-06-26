@@ -4,6 +4,8 @@ import CharacterInput from '../components/CharacterInput'; // Import CharacterIn
 import CharacterPicker from '../components/CharacterPicker'; // Import CharacterPicker component
 import StatRoller from '../components/StatRoller'; // Import StatRoller component
 import SaveCharacterButton from '../components/SaveCharacterButton'; // Import SaveCharacterButton component
+import { Ionicons } from '@expo/vector-icons';
+
 
 // Let's talk about how we import these json files into our project and why
 // We import these json files to use them as data for our character creation screen
@@ -23,6 +25,25 @@ import bard from '../data/classes/bard.json';
 import cleric from '../data/classes/cleric.json';
 import fighter from '../data/classes/fighter.json';
 import rogue from '../data/classes/rogue.json';
+
+const getClassIconName = (characterClass) => {
+  switch (characterClass.toLowerCase()) {
+    case 'fighter':
+      return 'shield-outline';
+    case 'cleric':
+      return 'medkit-outline';
+    case 'wizard':
+      return 'sparkles-outline';
+    case 'rogue':
+      return 'skull-outline';
+    case 'ranger':
+      return 'leaf-outline';
+    case 'bard':
+      return 'musical-notes-outline';
+    default:
+      return 'person-outline';
+  }
+};
 
 const ancestries = { dwarf, elf, halfling, human }; // Ancestries
 const backgrounds = { criminal, merchant, scholar, warrior }; // Backgrounds
@@ -75,6 +96,16 @@ const CreateCharacterScreen = ({ navigation }) => { // Pass navigation prop
           onValueChange={(value) => setCharacter({ ...character, characterClass: value })}
           items={classes}
         />
+
+<View style={styles.iconPreview}>
+  <Text style={styles.iconLabel}>Class Icon Preview:</Text>
+  <Ionicons
+    name={getClassIconName(character.characterClass)}
+    size={48}
+    color="#FFD700"
+  />
+</View>
+
         <Button title="Roll Stats" onPress={() => setStatModalVisible(true)} />
       </ScrollView>
       <StatRoller
@@ -96,6 +127,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#3C2F2F',
   },
+  iconPreview: {
+  alignItems: 'center',
+  marginVertical: 16,
+},
+
+iconLabel: {
+  fontSize: 16,
+  color: '#FFD700',
+  fontFamily: 'ConanFont',
+  marginBottom: 6,
+},
   scrollContainer: {
     flex: 1,
     paddingHorizontal: 10,

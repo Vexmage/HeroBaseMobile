@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { useUser } from '../UserContext';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function HomeScreen({ navigation }) {
   const { user, setUser } = useUser();
@@ -23,18 +25,25 @@ export default function HomeScreen({ navigation }) {
       {user ? (
         <>
           <Text style={styles.welcomeText}>Hello, {user}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('CreateCharacter')}
-          >
-            <Text style={styles.buttonText}>Create Character</Text>
+
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateCharacter')}>
+            <View style={styles.buttonContent}>
+              <Ionicons name="create-outline" size={20} color="#FFD700" style={styles.icon} />
+              <Text style={styles.buttonText}>Create Character</Text>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('ListCharacters')}
-          >
-            <Text style={styles.buttonText}>View Characters</Text>
+
+
+
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListCharacters')}>
+            <View style={styles.buttonContent}>
+              <Ionicons name="person-outline" size={20} color="#FFD700" style={styles.icon} />
+              <Text style={styles.buttonText}>View Characters</Text>
+            </View>
           </TouchableOpacity>
+
+
+
         </>
       ) : (
         <View style={styles.buttonContainer}>
@@ -76,18 +85,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: '#704214',
-    padding: 10,
-    alignItems: 'center',
-    borderRadius: 10,
-    width: '80%',
-    marginBottom: 10,
-  },
+button: {
+  backgroundColor: '#704214',
+  padding: 10,
+  alignItems: 'center',
+  borderRadius: 10,
+  width: '80%',
+  marginBottom: 10,
+  elevation: 3,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+},
+
   buttonText: {
     color: '#FFD700',
     fontSize: 18,
   },
+  buttonContent: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  },
+  icon: {
+    marginRight: 8,
+  },
+
   space: {
     height: 20,
   }

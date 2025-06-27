@@ -22,6 +22,7 @@ const CharacterInput = ({ value, onChange }) => { // CharacterInput component
       <TextInput
         style={styles.input}
         placeholder="Character Name"
+        placeholderTextColor="#888"
         value={value}
         onChangeText={handleChange}
       />
@@ -35,15 +36,20 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  input: {
-    height: 40,
-    borderColor: '#FFD700',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    color: '#FFD700',
-    fontFamily: 'ConanFont',
-  },
+input: {
+  height: 48,
+  width: '90%',
+  borderColor: '#FFD700',
+  borderWidth: 2,
+  borderRadius: 6,
+  marginBottom: 12,
+  paddingHorizontal: 12,
+  fontSize: 18,
+  color: '#FFD700',
+  backgroundColor: '#2A1F1F',
+  fontFamily: 'ConanFont',
+},
+
   error: {
     color: 'red',
     fontSize: 14,

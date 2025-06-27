@@ -1,43 +1,41 @@
-import React, { useState } from 'react'; // Import React and useState
-import { View, Text, StyleSheet, Modal, Button } from 'react-native'; // Import View, Text, StyleSheet, Modal, and Button components
-import { Picker as RNPicker } from '@react-native-picker/picker'; // Import Picker component from @react-native-picker/picker
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Modal, Pressable } from 'react-native';
+import { Picker as RNPicker } from '@react-native-picker/picker';
 
-// The code below is a component that displays a picker with a modal that shows the description of the selected item.
-// The component takes three props: selectedValue, onValueChange, and items.
-// selectedValue is the currently selected value.
-// onValueChange is a function that is called when the selected value changes.
-// items is an object that contains the items to be displayed in the picker.
-// The component renders a RNPicker component with the items passed as props.
-// When the value of the picker changes, the handleValueChange function is called, 
-// hich updates the selected item and opens the modal.
+const CharacterPicker = ({ selectedValue, onValueChange, items }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(selectedValue);
 
-const CharacterPicker = ({ selectedValue, onValueChange, items }) => { // CharacterPicker component
-  const [modalVisible, setModalVisible] = useState(false); // Modal visibility
-  const [selectedItem, setSelectedItem] = useState(selectedValue); // Selected item
-
-  const handleValueChange = (itemValue) => { // Handle value change
-    setSelectedItem(itemValue); // Update selected item
-    setModalVisible(true); // Open modal
+  const handleValueChange = (itemValue) => {
+    setSelectedItem(itemValue);
+    setModalVisible(true);
   };
 
-  const handleConfirm = () => { // Handle confirm
-    onValueChange(selectedItem); // Update selected value
-    setModalVisible(false); // Close modal
+  const handleConfirm = () => {
+    onValueChange(selectedItem);
+    setModalVisible(false);
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <RNPicker
         selectedValue={selectedValue}
-        style={styles.picker}
         onValueChange={handleValueChange}
+        style={styles.picker}
+        dropdownIconColor="#FFD700"
       >
-        {Object.keys(items).map(itemKey => (
-          <RNPicker.Item key={itemKey} label={items[itemKey].name} value={itemKey} />
+        {Object.keys(items).map((itemKey) => (
+          <RNPicker.Item
+            key={itemKey}
+            label={items[itemKey].name}
+            value={itemKey}
+            color="#FFD700"
+          />
         ))}
       </RNPicker>
+
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -45,47 +43,68 @@ const CharacterPicker = ({ selectedValue, onValueChange, items }) => { // Charac
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
-              {items[selectedItem] && items[selectedItem].system && items[selectedItem].system.description ? items[selectedItem].system.description.value : "No description available."}
+              {items[selectedItem]?.system?.description?.value || "No description available."}
             </Text>
-            <Button title="OK" onPress={handleConfirm} />
+            <Pressable style={styles.okButton} onPress={handleConfirm}>
+              <Text style={styles.okButtonText}>OK</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    borderRadius: 6,
+    backgroundColor: '#2A1F1F',
+    width: '90%',
+    alignSelf: 'center',
+  },
   picker: {
-    height: 50,
+    color: '#FFD700',
+    fontFamily: 'ConanFont',
+    height: 48,
     width: '100%',
-    marginBottom: 10,
   },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: 'rgba(20, 20, 20, 0.8)',
+    padding: 20,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#1E1E1E',
     borderRadius: 20,
-    padding: 35,
+    padding: 25,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: '#FFD700',
+    borderWidth: 2,
   },
   modalText: {
+    color: '#FFD700',
+    fontFamily: 'ConanFont',
+    fontSize: 16,
     marginBottom: 15,
     textAlign: 'center',
-  }
+  },
+  okButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    elevation: 2,
+  },
+  okButtonText: {
+    color: '#2A1F1F',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default CharacterPicker;
